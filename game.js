@@ -3,6 +3,8 @@ const ctx = canvas.getContext('2d');
 
 let objects = []; // ゲーム内のオブジェクト
 let residents = []; // 住民のリスト
+let paths = []; // 道路のパス
+let isDrawingRoad = false; // 道路の描画中フラグ
 let mouseX = 0; // マウスのX座標
 let mouseY = 0; // マウスのY座標
 
@@ -13,6 +15,13 @@ canvas.addEventListener('mousemove', (event) => {
     mouseY = event.clientY - rect.top;
 });
 
+// マウスクリックで道路を描く
+canvas.addEventListener('click', () => {
+    if (isDrawingRoad) {
+        paths.push({ x: mouseX, y: mouseY });
+    }
+});
+
 // ゲームの初期化
 function init() {
     loadGame(); // 保存データがあれば読み込む
@@ -21,38 +30,57 @@ function init() {
 
 // 土台を作成
 function createFoundation() {
-    objects.push({ type: 'foundation', x: mouseX, y: mouseY, width: 100, height: 20 });
+    const width = parseInt(document.getElementById('foundationWidth').value) || 100;
+    const height = parseInt(document.getElementById('foundationHeight').value) || 20;
+    objects.push({ type: 'foundation', x: mouseX, y: mouseY, width, height });
 }
 
 // 車のタイヤ作成
 function createWheel() {
-    objects.push({ type: 'wheel', x: mouseX, y: mouseY, radius: 10 });
+    const radius = parseInt(document.getElementById('wheelRadius').value) || 10;
+    objects.push({ type: 'wheel', x: mouseX, y: mouseY, radius });
 }
 
 // 家を作る
 function createHouse() {
-    objects.push({ type: 'house', x: mouseX, y: mouseY, width: 50, height: 50 });
+    const width = parseInt(document.getElementById('houseWidth').value) || 50;
+    const height = parseInt(document.getElementById('houseHeight').value) || 50;
+    objects.push({ type: 'house', x: mouseX, y: mouseY, width, height });
 }
 
 // 会社を作る（名前指定）
 function createCompany() {
     const name = document.getElementById('companyName').value || '会社';
-    objects.push({ type: 'company', x: mouseX, y: mouseY, width: 100, height: 100, name });
+    const width = parseInt(document.getElementById('companyWidth').value) || 100;
+    const height = parseInt(document.getElementById('companyHeight').value) || 100;
+    objects.push({ type: 'company', x: mouseX, y: mouseY, width, height, name });
 }
 
-// 道路を作成
+// 道路を作成（パスを指定）
+function startDrawingRoad() {
+    isDrawingRoad = true;
+    paths = [];
+}
+
+// 道路を確定
 function createRoad() {
-    objects.push({ type: 'road', x: mouseX, y: mouseY, length: 100, isHighway: false });
+    if (paths.length > 1) {
+        objects.push({ type: 'road', path: paths });
+    }
+    isDrawingRoad = false;
 }
 
 // 高速道路を作成
 function createHighway() {
-    objects.push({ type: 'road', x: mouseX, y: mouseY, length: 100, isHighway: true });
+    startDrawingRoad();
+    // 高速道路としての処理を追加する場合はここに記述
 }
 
-// 車を作る（簡単な移動を追加）
+// 車を作る
 function createCar() {
-    objects.push({ type: 'car', x: mouseX, y: mouseY, width: 30, height: 15, speed: 2 });
+    const width = parseInt(document.getElementById('carWidth').value) || 30;
+    const height = parseInt(document.getElementById('carHeight').value) || 15;
+    objects.push({ type: 'car', x: mouseX, y: mouseY, width, height, speed: 2 });
 }
 
 // 住民を追加（名前と画像指定、動作追加）
@@ -99,11 +127,13 @@ function draw() {
                 ctx.fillText(obj.name, obj.x + 5, obj.y + 15);
                 break;
             case 'road':
-                ctx.strokeStyle = obj.isHighway ? 'red' : 'gray';
-                ctx.lineWidth = obj.isHighway ? 8 : 5;
+                ctx.strokeStyle = 'gray';
+                ctx.lineWidth = 5;
                 ctx.beginPath();
-                ctx.moveTo(obj.x, obj.y);
-                ctx.lineTo(obj.x + obj.length, obj.y);
+                ctx.moveTo(obj.path[0].x, obj.path[0].y);
+                for (let i = 1; i < obj.path.length; i++) {
+                    ctx.lineTo(obj.path[i].x, obj.path[i].y);
+                }
                 ctx.stroke();
                 break;
             case 'car':
@@ -117,7 +147,7 @@ function draw() {
     
     // 住民の描画と動作
     for (const resident of residents) {
-        if (resident.image.complete) {
+        iちf (resident.image.complete) {
             ctx.drawImage(resident.image, resident.x, resident.y, 20, 20);
         }
         if (resident.action === 'wander') {
@@ -152,4 +182,4 @@ function loadGame() {
 }
 
 // 初期化を実行
-init();
+init();ち
