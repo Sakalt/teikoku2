@@ -27,21 +27,51 @@
             padding: 5px;
             font-size: 14px;
         }
+        .control-group {
+            margin: 5px;
+        }
+        .control-group input {
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="controls">
-        <button onclick="createFoundation()">土台を作る</button>
-        <button onclick="createWheel()">タイヤを作る</button>
-        <button onclick="createHouse()">家を作る</button>
-        <input id="companyName" type="text" placeholder="会社の名前">
-        <button onclick="createCompany()">会社を作る</button>
-        <button onclick="createRoad()">道路を作る</button>
-        <button onclick="createHighway()">高速道路を作る</button>
-        <input id="residentName" type="text" placeholder="住民の名前">
-        <input id="residentImage" type="file" accept="image/*">
-        <button onclick="createResident()">住民を追加</button>
-        <button onclick="createCar()">車を作る</button>
+        <div class="control-group">
+            <button onclick="createFoundation()">土台を作る</button>
+            <input id="foundationWidth" type="number" placeholder="幅" min="1" value="100">
+            <input id="foundationHeight" type="number" placeholder="高さ" min="1" value="20">
+        </div>
+        <div class="control-group">
+            <button onclick="createWheel()">タイヤを作る</button>
+            <input id="wheelRadius" type="number" placeholder="半径" min="1" value="10">
+        </div>
+        <div class="control-group">
+            <button onclick="createHouse()">家を作る</button>
+            <input id="houseWidth" type="number" placeholder="幅" min="1" value="50">
+            <input id="houseHeight" type="number" placeholder="高さ" min="1" value="50">
+        </div>
+        <div class="control-group">
+            <input id="companyName" type="text" placeholder="会社の名前">
+            <input id="companyWidth" type="number" placeholder="幅" min="1" value="100">
+            <input id="companyHeight" type="number" placeholder="高さ" min="1" value="100">
+            <button onclick="createCompany()">会社を作る</button>
+        </div>
+        <div class="control-group">
+            <button onclick="startDrawingRoad()">道路を作る</button>
+            <button onclick="createRoad()">道路を確定</button>
+            <button onclick="createHighway()">高速道路を作る</button>
+        </div>
+        <div class="control-group">
+            <input id="residentName" type="text" placeholder="住民の名前">
+            <input id="residentImage" type="file" accept="image/*">
+            <button onclick="createResident()">住民を追加</button>
+        </div>
+        <div class="control-group">
+            <button onclick="createCar()">車を作る</button>
+            <input id="carWidth" type="number" placeholder="幅" min="1" value="30">
+            <input id="carHeight" type="number" placeholder="高さ" min="1" value="15">
+        </div>
         <button onclick="saveGame()">保存</button>
         <button onclick="loadGame()">読み込み</button>
     </div>
